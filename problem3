@@ -4,12 +4,32 @@
 
 fname = input("Enter file name: ")
 fh = open(fname)
-lst = list()
-for line in fh:
-    words = line.split()
-    for word in words:
-        if word not in lst:
-            lst.append(word)
+lst = list()                             #defining an mpty list to store unique words
+for line in fh:                          #creating for loop to iterate thecontents of file. line mans current line being iterated
+    words = line.split()                 #assigning the variable to which current line gets splitted and stored
+    for word in words:                   #this loop iterates over list of words we got after splitting the current line
+        if word not in lst:              #For each word, the program checks if the word is already in lst. 
+            lst.append(word)             #If the word is not in lst, it will be added.
 lst.sort()
         
 print(lst)
+
+
+
+
+Reading Each Line:
+
+for line in fh: reads the file line by line. Each iteration, line represents one line from the file.
+Splitting the Line into Words:
+
+words = line.split() splits the line into individual words (breaking the string by spaces or other whitespace).
+words becomes a list of all the words in that line.
+Iterating Through the Words:
+
+for word in words: loops through each word in the words list (for that particular line).
+Checking for Duplicates:
+
+if word not in lst: checks if the current word is already in the lst. This prevents duplicates from being added.
+Adding Unique Words to lst:
+
+lst.append(word) is the crucial line where the word gets stored in the list. If the word was not already in lst (checked by the previous step), this line adds it to the list.
