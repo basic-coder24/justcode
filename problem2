@@ -6,15 +6,15 @@
 
 # Use the file name mbox-short.txt as the file name
 fname = input("Enter file name: ")
-fh = open(fname)
-count = 0
-total = 0
-for line in fh:
-    if line.startswith("X-DSPAM-Confidence:"):
-        jop = line.find(":")
-        jo = float(line[jop+1:].strip())
-        total += jo
-        count += 1
-if count > 0:
+fh = open(fname)     #open the file
+count = 0                                                 #variable to keep count of number of lines
+total = 0                                                 #variable to keep count the floating value
+for line in fh:                                           #for loop foriterating the file line by line
+    if line.startswith("X-DSPAM-Confidence:"):            #condition if any line starts with "X-DSPAM-Confidence:"
+        jop = line.find(":")                              #variable for finding the lins which start with "X-DSPAM-Confidence:" and have (:)
+        jo = float(line[jop+1:].strip())                  #variable forconverting the string after(:) into float while removing whitespaces from both sides
+        total += jo                                       #making the float value stored in total sum up as iteration happend throug each line
+        count += 1                                        #making the number of lines iterated increase one by one to reach all required lines
+if count > 0:                                             #if number of lines iterated is > 0 then calculate the average
     average = total/count
     print("Average spam confidence:",average)
