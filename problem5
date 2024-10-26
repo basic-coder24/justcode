@@ -1,0 +1,24 @@
+#Write a program to read through the mbox-short.txt and figure out who has sent the greatest number of mail messages.
+#The program looks for 'From ' lines and takes the second word of those lines as the person who sent the mail. 
+#The program creates a Python dictionary that maps the sender's mail address to a count of the number of times they appear in the file. After the dictionary is produced, 
+#the program reads through the dictionary using a maximum loop to find the most prolific committer.
+
+
+name = input("Enter file:")
+handle = open(name)
+counts = dict()                                             # Create an empty dictionary to store email counts
+for line in handle:
+    if line.startswith("From "):                            # Only process lines that start with 'From ' (indicating an email sender line)
+        words = line.split()                                # Split the line into words
+        email = words[1]                                    # The email address is the second word in the line
+        counts[email] = counts.get(email,0) + 1             # Increment the count for this email in the dictionary
+        
+        
+                                                           # Initialize variables to keep track of the email with the highest count
+bigcount = None                                             # This will store the highest email count found
+bigword = None                                              # This will store the email address with the highest count
+for email, count in counts.items():                         # Loop through the dictionary to find the email with the highest count
+    if bigcount is None or count > bigcount:                # If bigcount is None or the current count is greater than bigcount
+        bigcount = count                                    # Update bigcount to the new highest count
+        bigword = email                                     # Update bigword to the email with the highest count
+print(bigword,bigcount)
