@@ -1,0 +1,46 @@
+#Write a program to read through the mbox-short.txt and figure out the distribution by hour of the day for each of the messages. 
+#You can pull the hour out from the 'From ' line by finding the time and then splitting the string a second time using a colon.
+#From stephen.marquard@uct.ac.za Sat Jan  5 09:14:16 2008
+#Once you have accumulated the counts for each hour, print out the counts, sorted by hour as shown below.
+
+
+
+filename = input("Enter file name: ")
+if len(filename) < 1:
+    filename = "mbox-short.txt"
+    
+# Open the file
+file_handle = open(filename)
+
+# We create an empty dictionary hour_counts to store the counts of emails sent during each hour. 
+#The keys in this dictionary will be the hours (e.g., "09", "10", etc.), and the values will be the number of times each hour appears.
+hour_counts = {}
+
+# Loop through each line in the file
+for line in file_handle:
+    line = line.strip()
+    
+    # Only consider lines that start with "From "
+    if line.startswith("From "):
+        words = line.split()
+        
+ # The time variable is assigned words[5], which is the 6th element in the line (index 5). 
+#This part of the line usually contains the time in the format HH:MM:SS.
+
+        time = words[5]
+        
+# We split time by ":" to separate the hours, minutes, and seconds.
+Using [0] gives us the hour portion (HH), which we store in hour.
+        hour = time.split(":")[0]
+        
+ #Here, we use the dictionary hour_counts to keep track of how many times each hour appears:
+#hour_counts.get(hour, 0) checks if hour is already in hour_counts. If it exists, it returns the current count; if not, it returns 0.
+#We add 1 to this count and assign the updated value back to hour_counts[hour].
+#This effectively increases the count for each hour every time it appears in a "From " line.
+
+        hour_counts[hour] = hour_counts.get(hour, 0) + 1
+
+#sorted(hour_counts) sorts the dictionary keys (the hours) in ascending order. 
+#We then iterate through each hour in this sorted order and print the hour along with its count from hour_counts.
+for hour in sorted(hour_counts):
+    print(hour, hour_counts[hour])
