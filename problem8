@@ -1,0 +1,34 @@
+In this assignment you will write a Python program somewhat similar to http://www.py4e.com/code3/xml3.py. 
+The program will prompt for a URL, read the XML data from that URL using urllib and then parse and extract the comment counts from the XML data,
+compute the sum of the numbers in the file.
+You are to look through all the <comment> tags and find the <count> values sum the numbers. 
+
+
+
+
+
+import urllib.request, urllib.error  # Import necessary modules for URL requests and error handling
+import xml.etree.ElementTree as ET  # Import the xml.etree.ElementTree module for XML parsing
+
+# Prompt the user to input the URL where the XML data is located
+url = input("Enter URL: ")
+
+# Try to fetch the content from the provided URL
+response = urllib.request.urlopen(url)
+data = response.read().decode()  # Read the content and decode it into a string
+
+# Parse the XML data into an ElementTree object
+tree = ET.fromstring(data)
+
+# Find all 'comment' elements within the XML document
+comments = tree.findall('.//comment')
+
+# Extract the 'count' values for each 'comment' element and convert them into integers
+# Only include the 'count' values that are not None
+count_v = [int(comment.find('count').text) for comment in comments if comment.find('count') is not None]
+
+# Print the total number of 'comment' elements found
+print("Count:", len(comments))
+
+# Print the sum of all the 'count' values found in the 'comment' elements
+print("sum:", sum(count_v))
