@@ -1,0 +1,23 @@
+import urllib.request  # Importing modules to handle HTTP requests and JSON parsing
+import json
+
+# Prompt user for a URL input
+url = input("Enter URL: ")  
+
+# Open the URL and read the data, then decode it to convert bytes to a string
+response = urllib.request.urlopen(url)
+data = response.read().decode()
+
+# Parse the JSON data from the response
+info = json.loads(data)
+
+# Access the 'comments' section in the JSON data, which is a list of comment dictionaries
+comment = info['comments']
+
+# Calculate the sum of all 'count' values in each comment dictionary
+#-----------com will become a dictionary with keys and values for every name & count-----------
+count_v = sum(com['count'] for com in info['comments'])
+
+# Print the number of comments and the total sum of all 'count' values
+print("Count:", len(comment))  # Outputs the number of comments
+print("Sum:", count_v)          # Outputs the sum of the 'count' values in all comments
