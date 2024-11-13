@@ -1,0 +1,68 @@
+import sqlite3
+
+conn = sqlite3.connect('emaildb.sqlite')
+cur = conn.cursor()
+
+cur.execute('DROP TABLE IF EXISTS Counts')
+
+cur.execute('''
+CREATE TABLE Counts (email TEXT, count INTEGER)''')
+
+fname = input('Enter file name: ')
+if (len(fname) < 1): fname = 'mbox-short.txt'
+fh = open(fname)
+for line in fh:
+    if not line.startswith('From: '): continue
+    pieces = line.split()
+    email = pieces[1]
+    cur.execute('SELECT count FROM Counts WHERE email = ? ', (email,))
+    row = cur.fetchone()
+    if row is None:
+        cur.execute('''INSERT INTO Counts (email, count)
+                VALUES (?, 1)''', (email,))
+    else:
+        cur.execute('UPDATE Counts SET count = count + 1 WHERE email = ?',
+                    (email,))
+    conn.commit()
+
+# https://www.sqlite.org/lang_select.html
+sqlstr = 'SELECT email, count FROM Counts ORDER BY count DESC LIMIT 10'
+
+for row in cur.execute(sqlstr):
+    print(str(row[0]), row[1])
+
+cur.close()
+
+
+
+
+
+
+
+
+
+
+
+sqlite3 is imported to interact with SQLite databases.
+conn creates a connection to a new or existing SQLite database file called emaildb.sqlite.
+cur creates a cursor object that allows interaction with the database (e.g., executing SQL commands).
+
+DROP TABLE IF EXISTS: This deletes the Counts table if it already exists, allowing the script to start with a clean table each time it’s run.
+CREATE TABLE Counts: This command creates a new table Counts with two columns:
+email: Stores the email addresses as text.
+count: Stores the count of occurrences of each email as an integer.
+
+File Input: The user is prompted to enter a filename. If no filename is provided, it defaults to 'mbox-short.txt'.
+Opening the File: The file is opened for reading, and the file handle fh is used to iterate over the file line by line.
+
+Filtering Lines: Only lines that start with 'From: ' are processed (these lines contain email addresses).
+Extracting the Email: Each line is split into words, and the email address is the second item (pieces[1]).
+
+Querying the Database: The script checks if the email already exists in the database using SELECT count FROM Counts WHERE email = ?.
+If row is None, this email is not in the table yet, so it is inserted with a count of 1.
+If row is not None, the email already exists, so the count is incremented by 1.
+Parameter Substitution: The (email,) syntax safely inserts the email variable to avoid SQL injection.
+Committing Changes: conn.commit() saves changes to the database.
+
+SQL Query: This SQL command selects the top 10 email addresses ordered by the count in descending order.
+Printing Results: For each row in the result, it prints the email and the count.
